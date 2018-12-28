@@ -1,11 +1,12 @@
 #![allow(dead_code)]
 extern crate regex;
-#[macro_use] extern crate lazy_static;
+#[macro_use]
+extern crate lazy_static;
 
+use regex::Regex;
 use std::collections::HashMap;
 use std::error;
 use std::fs;
-use regex::Regex;
 
 type Result<T> = std::result::Result<T, Box<error::Error>>;
 
@@ -15,7 +16,7 @@ struct Claim {
     x: i32,
     y: i32,
     width: i32,
-    height: i32
+    height: i32,
 }
 
 impl Claim {
@@ -35,27 +36,47 @@ impl Claim {
 fn main() {
     let input = fs::read_to_string("input.txt").unwrap();
     let lines: Vec<&str> = input.lines().collect();
-    let two_or_more: i32 = set_claims(&lines)
-                                .iter()
-                                .fold(0, |mut sum, (_, &v)| {
-                                    if v > 1 {
-                                        sum += 1
-                                    }
-                                    sum
-                                });
-    println!("Cords within two or more: {}", two_or_more);
+    println!("Cords within two or more: {}", two_or_more(&lines));
+    println!("ID of not overlapping claim: {}", none_overlapping_claim(&lines).id);
+}
+
+fn two_or_more(claims: &[&str]) -> i32 {
+    set_claims(claims).iter().fold(0, |mut sum, (_, &v)| {
+        if v > 1 {
+            sum += 1
+        }
+        sum
+    })
+}
+
+fn none_overlapping_claim(claims: &[&str]) -> Claim {
+    let fabric = set_claims(claims);
+    claims
+        .iter()
+        .map(|&claim_str| parse_claim(claim_str))
+        .flatten()
+        .find(|claim| {
+            claim.expand().iter().all(|coord| {
+                if let Some(&claim_count) = fabric.get(coord) {
+                    return claim_count < 2;
+                }
+                false
+            })
+        })
+        .unwrap()
 }
 
 fn set_claims(claims: &[&str]) -> HashMap<String, i32> {
     let mut fabric = HashMap::new();
-    claims.iter()
+    claims
+        .iter()
         .map(|&claim_str| parse_claim(claim_str))
         .filter_map(Option::Some)
         .flatten()
         .map(|claim| claim.expand())
         .flatten()
         .for_each(|claim_cord| {
-           *fabric.entry(claim_cord).or_insert(0) += 1;
+            *fabric.entry(claim_cord).or_insert(0) += 1;
         });
 
     fabric
@@ -63,16 +84,18 @@ fn set_claims(claims: &[&str]) -> HashMap<String, i32> {
 
 fn parse_claim(claim: &str) -> Option<Claim> {
     lazy_static! {
-        static ref RE: Regex = Regex::new(r"#(?P<id>\d+)\s@\s(?P<x>\d+),(?P<y>\d+):\s(?P<width>\d+)x(?P<height>\d+)").unwrap();
+        static ref RE: Regex =
+            Regex::new(r"#(?P<id>\d+)\s@\s(?P<x>\d+),(?P<y>\d+):\s(?P<width>\d+)x(?P<height>\d+)")
+                .unwrap();
     }
     RE.captures(claim).map(|caps| {
-
+        // this should never panic because the regexp matched
         Claim {
             id: caps["id"].to_owned(),
             x: caps["x"].parse::<i32>().unwrap(),
             y: caps["y"].parse::<i32>().unwrap(),
             width: caps["width"].parse::<i32>().unwrap(),
-            height: caps["height"].parse::<i32>().unwrap()
+            height: caps["height"].parse::<i32>().unwrap(),
         }
     })
 }
@@ -84,7 +107,7 @@ fn test_parse_claim() {
         x: 1,
         y: 3,
         width: 4,
-        height: 4
+        height: 4,
     };
     let result = parse_claim("#1 @ 1,3: 4x4");
     assert_eq!(result.unwrap(), expected);
@@ -93,28 +116,25 @@ fn test_parse_claim() {
 #[allow(unused_variables)]
 #[test]
 fn test_expand_claim() {
-    let claim = Claim { id: "1".to_owned(),
+    let claim = Claim {
+        id: "1".to_owned(),
         x: 1,
         y: 1,
         width: 2,
-        height: 2
+        height: 2,
     };
     let expected = vec![
         "1,1".to_owned(),
         "1,2".to_owned(),
         "2,1".to_owned(),
-        "2,2".to_owned()
+        "2,2".to_owned(),
     ];
     assert_eq!(claim.expand(), expected);
 }
 
 #[test]
 fn test_example() {
-    let claims = vec![
-        "#1 @ 1,3: 4x4",
-        "#2 @ 3,1: 4x4",
-        "#3 @ 5,5: 2x2"
-    ];
+    let claims = vec!["#1 @ 1,3: 4x4", "#2 @ 3,1: 4x4", "#3 @ 5,5: 2x2"];
 
     let result = set_claims(&claims);
     let mut expected = HashMap::new();
