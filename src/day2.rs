@@ -82,18 +82,14 @@ fn test_counting_with_zero() {
 
 #[test]
 fn test_suming_up() {
-    let seq = vec![
-        "abcdef", "bababc", "abbcde", "abcccd", "aabcdd", "abcdee", "ababab",
-    ];
-    assert_eq!(solve_part_a(&seq), 12);
+    let input = "abcdef\nbababc\nabbcde\nabcccd\naabcdd\nabcdee\nababab";
+    assert_eq!(solve_part_a(input), 12);
 }
 
 #[test]
 fn test_finding_similars() {
-    let seq = vec![
-        "abcde", "fghij", "klmno", "pqrst", "fguij", "axcye", "wvxyz",
-    ];
-    assert_eq!(similars(&seq), ("fghij", "fguij"));
+    let input = "abcde\nfghij\nklmno\npqrst\nfguij\naxcye\nwvxyz";
+    assert_eq!(similars(input), ("fghij", "fguij"));
 }
 
 #[test]
@@ -103,8 +99,6 @@ fn test_same_partial() {
 
 #[test]
 fn test_find_partial() {
-    let seq = vec![
-        "abcde", "fghij", "klmno", "pqrst", "fguij", "axcye", "wvxyz",
-    ];
-    assert_eq!(solve_part_b(&seq), "fgij".to_owned())
+    let input = "abcde\nfghij\nklmno\npqrst\nfguij\naxcye\nwvxyz";
+    assert_eq!(solve_part_b(input), "fgij".to_owned())
 }

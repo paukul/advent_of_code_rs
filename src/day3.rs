@@ -1,5 +1,3 @@
-extern crate regex;
-
 use regex::Regex;
 use std::collections::HashMap;
 
@@ -122,7 +120,11 @@ fn test_expand_claim() {
 
 #[test]
 fn test_example() {
-    let claims = vec!["#1 @ 1,3: 4x4", "#2 @ 3,1: 4x4", "#3 @ 5,5: 2x2"];
+    let claims = vec!["#1 @ 1,3: 4x4", "#2 @ 3,1: 4x4", "#3 @ 5,5: 2x2"]
+      .iter()
+      .map(|&claim_str| parse_claim(claim_str))
+      .flatten()
+      .collect::<Vec<Claim>>();
 
     let result = set_claims(&claims);
     let mut expected = HashMap::new();
