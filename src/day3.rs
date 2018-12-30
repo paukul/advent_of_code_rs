@@ -131,11 +131,9 @@ fn test_example() {
     expected.insert("4,1".to_owned(), 1);
     expected.insert("5,1".to_owned(), 1);
     expected.insert("6,1".to_owned(), 1);
-    expected.insert("7,1".to_owned(), 1);
     expected.insert("4,2".to_owned(), 1);
     expected.insert("5,2".to_owned(), 1);
     expected.insert("6,2".to_owned(), 1);
-    expected.insert("7,2".to_owned(), 1);
     expected.insert("1,3".to_owned(), 1);
     expected.insert("2,3".to_owned(), 1);
     expected.insert("3,3".to_owned(), 2);
@@ -144,10 +142,13 @@ fn test_example() {
     expected.insert("6,3".to_owned(), 1);
     expected.insert("1,4".to_owned(), 1);
     expected.insert("2,4".to_owned(), 1);
+    expected.insert("3,1".to_owned(), 1);
+    expected.insert("3,2".to_owned(), 1);
     expected.insert("3,4".to_owned(), 2);
     expected.insert("4,4".to_owned(), 2);
     expected.insert("5,4".to_owned(), 1);
     expected.insert("6,4".to_owned(), 1);
+    expected.insert("1,5".to_owned(), 1);
     expected.insert("2,5".to_owned(), 1);
     expected.insert("3,5".to_owned(), 1);
     expected.insert("4,5".to_owned(), 1);
@@ -159,6 +160,21 @@ fn test_example() {
     expected.insert("4,6".to_owned(), 1);
     expected.insert("5,6".to_owned(), 1);
     expected.insert("6,6".to_owned(), 1);
+    for (k, v) in &expected {
+        if let Some(v2) = result.get(k) {
+            if v != v2 {
+                println!("Key {} is {} should be {}", k, v2, v)
+            }
+        } else {
+            println!("Key {} missing", k);
+        }
+    }
+
+    for (k, _) in &result {
+        if expected.get(k).is_none() {
+            println!("Extranous key {}", k);
+        }
+    }
 
     assert_eq!(result, expected);
 }
