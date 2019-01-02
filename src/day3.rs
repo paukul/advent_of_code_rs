@@ -98,11 +98,11 @@ fn test_parse_claim() {
         id: "1".to_owned(),
         x: 1,
         y: 3,
-        width: 4,
-        height: 4,
-        expands: Vec::new(),
+        width: 1,
+        height: 1,
+        expands: vec!["1,3".to_owned()],
     };
-    let result = Claim::new("#1 @ 1,3: 4x4");
+    let result = Claim::new("#1 @ 1,3: 1x1");
     assert_eq!(result, expected);
 }
 
@@ -128,38 +128,38 @@ fn test_example() {
 
     let result = set_claims(&claims);
     let mut expected = HashMap::new();
-    expected.insert("4,1".to_owned(), 1);
-    expected.insert("5,1".to_owned(), 1);
-    expected.insert("6,1".to_owned(), 1);
-    expected.insert("4,2".to_owned(), 1);
-    expected.insert("5,2".to_owned(), 1);
-    expected.insert("6,2".to_owned(), 1);
-    expected.insert("1,3".to_owned(), 1);
-    expected.insert("2,3".to_owned(), 1);
-    expected.insert("3,3".to_owned(), 2);
-    expected.insert("4,3".to_owned(), 2);
-    expected.insert("5,3".to_owned(), 1);
-    expected.insert("6,3".to_owned(), 1);
-    expected.insert("1,4".to_owned(), 1);
-    expected.insert("2,4".to_owned(), 1);
-    expected.insert("3,1".to_owned(), 1);
-    expected.insert("3,2".to_owned(), 1);
-    expected.insert("3,4".to_owned(), 2);
-    expected.insert("4,4".to_owned(), 2);
-    expected.insert("5,4".to_owned(), 1);
-    expected.insert("6,4".to_owned(), 1);
-    expected.insert("1,5".to_owned(), 1);
-    expected.insert("2,5".to_owned(), 1);
-    expected.insert("3,5".to_owned(), 1);
-    expected.insert("4,5".to_owned(), 1);
-    expected.insert("5,5".to_owned(), 1);
-    expected.insert("6,5".to_owned(), 1);
-    expected.insert("1,6".to_owned(), 1);
-    expected.insert("2,6".to_owned(), 1);
-    expected.insert("3,6".to_owned(), 1);
-    expected.insert("4,6".to_owned(), 1);
-    expected.insert("5,6".to_owned(), 1);
-    expected.insert("6,6".to_owned(), 1);
+    expected.insert("4,1", 1);
+    expected.insert("5,1", 1);
+    expected.insert("6,1", 1);
+    expected.insert("4,2", 1);
+    expected.insert("5,2", 1);
+    expected.insert("6,2", 1);
+    expected.insert("1,3", 1);
+    expected.insert("2,3", 1);
+    expected.insert("3,3", 2);
+    expected.insert("4,3", 2);
+    expected.insert("5,3", 1);
+    expected.insert("6,3", 1);
+    expected.insert("1,4", 1);
+    expected.insert("2,4", 1);
+    expected.insert("3,1", 1);
+    expected.insert("3,2", 1);
+    expected.insert("3,4", 2);
+    expected.insert("4,4", 2);
+    expected.insert("5,4", 1);
+    expected.insert("6,4", 1);
+    expected.insert("1,5", 1);
+    expected.insert("2,5", 1);
+    expected.insert("3,5", 1);
+    expected.insert("4,5", 1);
+    expected.insert("5,5", 1);
+    expected.insert("6,5", 1);
+    expected.insert("1,6", 1);
+    expected.insert("2,6", 1);
+    expected.insert("3,6", 1);
+    expected.insert("4,6", 1);
+    expected.insert("5,6", 1);
+    expected.insert("6,6", 1);
     for (k, v) in &expected {
         if let Some(v2) = result.get(k) {
             if v != v2 {
