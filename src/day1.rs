@@ -10,7 +10,7 @@ pub fn get_vec(lines: &str) -> Vec<i32> {
 
 #[aoc(day1, part1)]
 pub fn solve_part_1(input: &[i32]) -> i32 {
-  input.iter().sum()
+    input.iter().sum()
 }
 
 #[aoc(day1, part2)]

@@ -35,30 +35,29 @@ fn calc(ids: &str) -> (i32, i32) {
 
 fn similars(input: &str) -> (&str, &str) {
     let ids: Vec<&str> = input.lines().collect();
-    ids
-      .iter()
-      .enumerate()
-      .find_map(|(index, &id)| {
-          let head = &ids[0..index];
-          let tail = &ids[(index + 1)..];
+    ids.iter()
+        .enumerate()
+        .find_map(|(index, &id)| {
+            let head = &ids[0..index];
+            let tail = &ids[(index + 1)..];
 
-          let found = head.iter().chain(tail.iter()).find(|&comparison_id| {
-              let diff =
-                  comparison_id
-                      .chars()
-                      .zip(id.chars())
-                      .fold(0, |mut diff, (left, right)| {
-                          if left != right {
-                              diff += 1;
-                          }
-                          diff
-                      });
+            let found = head.iter().chain(tail.iter()).find(|&comparison_id| {
+                let diff =
+                    comparison_id
+                        .chars()
+                        .zip(id.chars())
+                        .fold(0, |mut diff, (left, right)| {
+                            if left != right {
+                                diff += 1;
+                            }
+                            diff
+                        });
 
-              diff == 1
-          });
-          found.map(|&f| (id, f))
-      })
-      .unwrap()
+                diff == 1
+            });
+            found.map(|&f| (id, f))
+        })
+        .unwrap()
 }
 
 fn same_partial(left: &str, right: &str) -> String {
