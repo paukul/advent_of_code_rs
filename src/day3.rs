@@ -68,7 +68,7 @@ pub fn none_overlapping_claim(claims: &[Claim]) -> String {
         .iter()
         .find(|&claim| {
             claim.expands.iter().all(|coord| {
-                if let Some(&claim_count) = fabric.get(coord) {
+                if let Some(&claim_count) = fabric.get(coord.as_str()) {
                     return claim_count < 2;
                 }
                 false
@@ -79,14 +79,14 @@ pub fn none_overlapping_claim(claims: &[Claim]) -> String {
         .clone()
 }
 
-fn set_claims(claims: &[Claim]) -> HashMap<String, i32> {
+fn set_claims(claims: &[Claim]) -> HashMap<&str, i32> {
     let mut fabric = HashMap::new();
     claims
         .iter()
         .map(|claim| &claim.expands)
         .flatten()
         .for_each(|claim_cord| {
-            *fabric.entry(claim_cord.clone()).or_insert(0) += 1;
+            *fabric.entry(claim_cord.as_str()).or_insert(0) += 1;
         });
 
     fabric
